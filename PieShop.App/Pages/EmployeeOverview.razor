@@ -40,3 +40,6 @@ else
         </tbody>
     </table>
 }
+
+<button @onclick="QuickAddEmployee" class="bbbtn btn-dark table-btn quick-add-btn">&nbsp;&nbsp;+&nbsp;</button>
+<PieShop.App.Components.AddEmployeeDialog @ref="AddEmployeeDialog" CloseEventCallback="@AddEmployeeDialog_OnDialogClose"></PieShop.App.Components.AddEmployeeDialog>

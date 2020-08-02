@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text.Json;
 using System.Threading.Tasks;
 using BethanysPieShopHRM.Shared;
 
@@ -16,23 +16,23 @@ namespace PieShop.App.Services
             _httpClient = httpClient;
         }
 
-        public Task<Employee> AddEmployee(Employee employee)
+        public async Task<Employee> AddEmployee(Employee employee)
         {
-            throw new NotImplementedException();
+            var response = await _httpClient.PostAsJsonAsync("api/employee", employee);
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new HttpRequestException("Error while adding the employee.");
+            }
+
+            return JsonSerializer.Deserialize<Employee>(await response.Content.ReadAsStringAsync());
         }
 
-        public Task DeleteEmployee(int employeeId)
-        {
-            throw new NotImplementedException();
-        }
+        public Task DeleteEmployee(int employeeId) => _httpClient.DeleteAsync($"api/employee/{employeeId}");
 
         public Task<IEnumerable<Employee>> GetAllEmployees() => _httpClient.GetFromJsonAsync<IEnumerable<Employee>>("api/employee");
 
         public Task<Employee> GetEmployeeDetails(int employeeId) => _httpClient.GetFromJsonAsync<Employee>($"api/employee/{employeeId}");
 
-        public Task UpdateEmployee(Employee employee)
-        {
-            throw new NotImplementedException();
-        }
+        public Task UpdateEmployee(Employee employee) => _httpClient.PutAsJsonAsync("api/employee", employee);
     }
 }
